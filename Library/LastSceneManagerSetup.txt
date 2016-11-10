@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/GridTest.unity
+- path: Assets/databaseTest.unity
   isLoaded: 1
   isActive: 1

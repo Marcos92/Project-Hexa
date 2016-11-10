@@ -7,18 +7,22 @@ using System;
 
 public class Database : MonoBehaviour
 {
-	static public List<Card> cardDatabase; 
+	public GameObject cardTemplate;
+
+	static public List<GameObject> cardDatabase; 
 
 	public void buildCardDatabase()
 	{
-		cardDatabase = new List<Card> ();
+		cardDatabase = new List<GameObject> ();
 
 		string line;
 		StreamReader reader = new StreamReader ("Assets/creaturesDatabase.txt");
 
 		line = reader.ReadLine(); //Discard first line
 
-		do
+		Vector3 cardPosition = new Vector3 (0, 0, 0);
+
+		while (line != null)
 		{
 			line = reader.ReadLine();
 
@@ -27,12 +31,13 @@ public class Database : MonoBehaviour
 				string[] entries = line.Split('\t');
 				if (entries.Length > 0)
 				{
-					cardDatabase.Add(new Card(entries[0], entries[8], int.Parse(entries[3]), int.Parse(entries[1]), int.Parse(entries[5]), int.Parse(entries[4]), int.Parse(entries[6]), int.Parse(entries[7])));
-					cardDatabase[cardDatabase.Count - 1].print();
+					GameObject card = Instantiate (cardTemplate, cardPosition, Quaternion.identity) as GameObject;
+					card.GetComponent<Card>().create(entries[0], entries[8], int.Parse(entries[3]), int.Parse(entries[1]), int.Parse(entries[5]), int.Parse(entries[4]), int.Parse(entries[6]), int.Parse(entries[7]));
+					cardDatabase.Add(card);
+					cardPosition += Vector3.right * 5;
 				}
 			}
 		}
-		while (line != null);
 
 		reader.Close();
 	}

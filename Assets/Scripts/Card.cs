@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Card : MonoBehaviour
 {
-    public enum Type { Creature, Spell, Trap }
+	public enum Type { Creature, Spell, Trap }
     public Type type;
 
 	string title;
@@ -30,23 +30,42 @@ public class Card : MonoBehaviour
 	//List with all the card effects
 
 	//Creature card constructor
-	public Card (string title, string description, int cost, int rarity, int maxHealth, int attack, int speed, int range)
-	{
-		this.title = title;
-		this.description = description;
-		this.cost = cost;
-		this.rarity = rarity;
-		this.maxHealth = maxHealth;
-		this.attack = attack;
-		this.speed = speed;
-		this.range = range;
-
-		type = Type.Creature;
-	}
 
 	//Spell card constructor
 
 	//Trap card constructor
+
+	public void create(string _title, string _description, int _cost, int _rarity, int _maxHealth, int _attack, int _speed, int _range)
+	{
+		title = _title;
+		transform.FindChild ("NameLabel").GetComponent <TextMesh>().text = _title;
+
+		description = _description;
+		transform.FindChild ("DescriptionLabel").GetComponent <TextMesh>().text = _description;
+
+		cost = _cost;
+		transform.FindChild ("ManaLabel").GetComponent <TextMesh>().text = _cost.ToString();
+
+		rarity = _rarity;
+		//Do stuff
+
+		maxHealth = _maxHealth;
+		currentHealth = maxHealth;
+		transform.FindChild ("HealthLabel").GetComponent <TextMesh>().text = _maxHealth.ToString();
+
+		attack = _attack;
+		transform.FindChild ("AttackLabel").GetComponent <TextMesh>().text = _attack.ToString();
+
+		speed = _speed;
+		transform.FindChild ("SpeedLabel").GetComponent <TextMesh>().text = _speed.ToString();
+
+		range = _range;
+		transform.FindChild ("RangeLabel").GetComponent <TextMesh>().text = _range.ToString();
+
+		type = Type.Creature;
+
+		print();
+	}
 
 	public void print()
 	{
@@ -75,7 +94,10 @@ public class Card : MonoBehaviour
             yield return null;
         }
 
-        if (transform.localPosition.y > 2) transform.localPosition = new Vector3(transform.localPosition.x, 2, transform.localPosition.z);
+		if (transform.localPosition.y > 2) 
+		{
+			transform.localPosition = new Vector3 (transform.localPosition.x, 2, transform.localPosition.z);
+		}
     }
 
     IEnumerator HoverDown()
@@ -89,6 +111,9 @@ public class Card : MonoBehaviour
             yield return null;
         }
 
-        if (transform.localPosition.y < 0) transform.localPosition = new Vector3(transform.localPosition.x, 0, transform.localPosition.z);
+        if (transform.localPosition.y < 0) 
+		{
+			transform.localPosition = new Vector3(transform.localPosition.x, 0, transform.localPosition.z);
+		}
     }
 }
