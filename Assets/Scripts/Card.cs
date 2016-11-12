@@ -1,10 +1,20 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Card : MonoBehaviour
 {
-	public enum Type { Creature, Spell, Trap }
-    public Type type;
+	GameObject canvas;
+
+	GameObject nameLabel;
+	GameObject costLabel;
+	GameObject descriptionLabel;
+	GameObject tribeLabel;
+
+	GameObject attackLabel;
+	GameObject healthLabel;
+	GameObject speedLabel;
+	GameObject rangeLabel;
 
 	string title;
 	string description;
@@ -12,7 +22,7 @@ public class Card : MonoBehaviour
 	int cost;
 	int rarity;
 
-	//Creature cards only
+	//To reset card stats if needed
 	int initialMaxHealth;
 	int initialAttack;
 	int initialSpeed;
@@ -25,8 +35,6 @@ public class Card : MonoBehaviour
 
 	int currentHealth;
 
-	Creature creature;
-
 	//List with all the card effects
 
 	//Creature card constructor
@@ -35,34 +43,51 @@ public class Card : MonoBehaviour
 
 	//Trap card constructor
 
-	public void create(string _title, string _description, int _cost, int _rarity, int _maxHealth, int _attack, int _speed, int _range)
+	public void create(string _title, string _description, int _cost, int _rarity, int _attack, int _maxHealth, int _speed, int _range)
 	{
-		title = _title;
-		transform.FindChild ("NameLabel").GetComponent <TextMesh>().text = _title;
+		canvas = transform.FindChild ("Canvas").gameObject;
 
-		description = _description;
-		transform.FindChild ("DescriptionLabel").GetComponent <TextMesh>().text = _description;
+		attackLabel = canvas.transform.FindChild ("AttackLabel").gameObject;
+		healthLabel = canvas.transform.FindChild ("HealthLabel").gameObject;
+		speedLabel = canvas.transform.FindChild ("SpeedLabel").gameObject;
+		rangeLabel = canvas.transform.FindChild ("RangeLabel").gameObject;
+
+		nameLabel = canvas.transform.FindChild ("NameLabel").gameObject;
+		costLabel = canvas.transform.FindChild ("CostLabel").gameObject;
+		descriptionLabel = canvas.transform.FindChild ("DescriptionLabel").gameObject;
+		tribeLabel = canvas.transform.FindChild ("TribeLabel").gameObject;
+
+		title = _title;
+		nameLabel.GetComponent<Text>().text= title;
 
 		cost = _cost;
-		transform.FindChild ("ManaLabel").GetComponent <TextMesh>().text = _cost.ToString();
+		costLabel.GetComponent<Text>().text= cost.ToString();
+	
+		description = _description;
+		description.Trim ('-');
+		descriptionLabel.GetComponent<Text>().text= description;
+
+		//Tribe assignment and label here
 
 		rarity = _rarity;
-		//Do stuff
-
-		maxHealth = _maxHealth;
-		currentHealth = maxHealth;
-		transform.FindChild ("HealthLabel").GetComponent <TextMesh>().text = _maxHealth.ToString();
+		//Assign respective rarity gem
 
 		attack = _attack;
-		transform.FindChild ("AttackLabel").GetComponent <TextMesh>().text = _attack.ToString();
+		initialAttack = attack;
+		attackLabel.GetComponent<Text>().text= attack.ToString();
+
+		maxHealth = _maxHealth;
+		initialMaxHealth = maxHealth;
+		currentHealth = maxHealth;
+		healthLabel.GetComponent<Text>().text= maxHealth.ToString();
 
 		speed = _speed;
-		transform.FindChild ("SpeedLabel").GetComponent <TextMesh>().text = _speed.ToString();
+		initialSpeed = speed;
+		speedLabel.GetComponent<Text>().text= speed.ToString();
 
 		range = _range;
-		transform.FindChild ("RangeLabel").GetComponent <TextMesh>().text = _range.ToString();
-
-		type = Type.Creature;
+		initialRange = range;
+		rangeLabel.GetComponent<Text>().text= range.ToString();
 
 		print();
 	}
