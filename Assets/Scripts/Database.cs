@@ -32,7 +32,7 @@ public class Database : MonoBehaviour
 				if (entries.Length > 0)
 				{
 					GameObject card = Instantiate (cardTemplate, cardPosition, Quaternion.identity) as GameObject;
-					card.GetComponent<Card>().create(entries[0], entries[8], int.Parse(entries[3]), int.Parse(entries[1]), int.Parse(entries[4]), int.Parse(entries[5]), int.Parse(entries[6]), int.Parse(entries[7]));
+					card.GetComponent<Card>().Create(entries[0], entries[8], int.Parse(entries[3]), int.Parse(entries[1]), int.Parse(entries[4]), int.Parse(entries[5]), int.Parse(entries[6]), int.Parse(entries[7]));
 					cardDatabase.Add(card);
 					cardPosition += Vector3.right * 5;
 				}

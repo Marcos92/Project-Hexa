@@ -4,6 +4,7 @@ using System.Collections;
 
 public class Card : MonoBehaviour
 {
+	//UI
 	GameObject canvas;
 
 	GameObject nameLabel;
@@ -16,13 +17,16 @@ public class Card : MonoBehaviour
 	GameObject speedLabel;
 	GameObject rangeLabel;
 
+	float originalDepth;
+	int originalLayerOrder;
+
+	//Data
 	string title;
 	string description;
 
 	int cost;
 	int rarity;
 
-	//To reset card stats if needed
 	int initialMaxHealth;
 	int initialAttack;
 	int initialSpeed;
@@ -43,9 +47,12 @@ public class Card : MonoBehaviour
 
 	//Trap card constructor
 
-	public void create(string _title, string _description, int _cost, int _rarity, int _attack, int _maxHealth, int _speed, int _range)
+	public void Create(string _title, string _description, int _cost, int _rarity, int _attack, int _maxHealth, int _speed, int _range)
 	{
 		canvas = transform.FindChild ("Canvas").gameObject;
+
+		originalDepth = transform.localPosition.z;
+		originalLayerOrder = transform.GetComponent<SpriteRenderer> ().sortingOrder;
 
 		attackLabel = canvas.transform.FindChild ("AttackLabel").gameObject;
 		healthLabel = canvas.transform.FindChild ("HealthLabel").gameObject;
@@ -89,10 +96,10 @@ public class Card : MonoBehaviour
 		initialRange = range;
 		rangeLabel.GetComponent<Text>().text= range.ToString();
 
-		print();
+		Print();
 	}
 
-	public void print()
+	public void Print()
 	{
 		Debug.Log (title + "\t" + description + "\n" + "Rarity: " + rarity + "\tCost: " + cost + "\tStats: " + attack + "/" + maxHealth + "/" + speed + "/" + range);
 	}
@@ -111,6 +118,11 @@ public class Card : MonoBehaviour
 
     IEnumerator HoverUp()
     {
+		Vector3 v = transform.localPosition;
+		transform.localPosition = new Vector3 (v.x, v.y, -1f);
+
+		transform.GetComponent<SpriteRenderer> ().sortingOrder = 20;
+
         while(transform.localPosition.y < 2)
         {
             Vector3 p = transform.localPosition;
@@ -127,6 +139,11 @@ public class Card : MonoBehaviour
 
     IEnumerator HoverDown()
     {
+		Vector3 v = transform.localPosition;
+		transform.localPosition = new Vector3 (v.x, v.y, originalDepth);
+
+		transform.GetComponent<SpriteRenderer> ().sortingOrder = originalLayerOrder;
+
 		float speed = -CardBehaviour.cardHoverDownSpeed * Time.deltaTime;
 
         while (transform.localPosition.y > 0)
@@ -141,4 +158,14 @@ public class Card : MonoBehaviour
 			transform.localPosition = new Vector3(transform.localPosition.x, 0, transform.localPosition.z);
 		}
     }
+
+	void BringForward()
+	{
+		
+	}
+
+	void BringBack()
+	{
+		
+	}
 }
