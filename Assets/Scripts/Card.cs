@@ -17,8 +17,8 @@ public class Card : MonoBehaviour
 	GameObject speedLabel;
 	GameObject rangeLabel;
 
-	float originalDepth;
-	int originalLayerOrder;
+	public float originalDepth;
+	public int originalOrder;
 
 	//Data
 	string title;
@@ -47,12 +47,13 @@ public class Card : MonoBehaviour
 
 	//Trap card constructor
 
-	public void Create(string _title, string _description, int _cost, int _rarity, int _attack, int _maxHealth, int _speed, int _range)
+	void Start()
 	{
 		canvas = transform.FindChild ("Canvas").gameObject;
 
 		originalDepth = transform.localPosition.z;
-		originalLayerOrder = transform.GetComponent<SpriteRenderer> ().sortingOrder;
+		originalOrder = GetComponent<SpriteRenderer>().sortingOrder;
+		canvas.GetComponent<Canvas>().sortingOrder = originalOrder;
 
 		attackLabel = canvas.transform.FindChild ("AttackLabel").gameObject;
 		healthLabel = canvas.transform.FindChild ("HealthLabel").gameObject;
@@ -63,7 +64,10 @@ public class Card : MonoBehaviour
 		costLabel = canvas.transform.FindChild ("CostLabel").gameObject;
 		descriptionLabel = canvas.transform.FindChild ("DescriptionLabel").gameObject;
 		tribeLabel = canvas.transform.FindChild ("TribeLabel").gameObject;
+	}
 
+	public void Create(string _title, string _description, int _cost, int _rarity, int _attack, int _maxHealth, int _speed, int _range)
+	{
 		title = _title;
 		nameLabel.GetComponent<Text>().text= title;
 
@@ -104,11 +108,11 @@ public class Card : MonoBehaviour
 		Debug.Log (title + "\t" + description + "\n" + "Rarity: " + rarity + "\tCost: " + cost + "\tStats: " + attack + "/" + maxHealth + "/" + speed + "/" + range);
 	}
 
-    void OnMouseEnter()
-    {
-        StopCoroutine("HoverDown");
-        StartCoroutine("HoverUp");
-    }
+	void OnMouseEnter()
+	{
+		StopCoroutine("HoverDown");
+		StartCoroutine("HoverUp");
+	}
 
     void OnMouseExit()
     {
@@ -118,54 +122,55 @@ public class Card : MonoBehaviour
 
     IEnumerator HoverUp()
     {
-		Vector3 v = transform.localPosition;
-		transform.localPosition = new Vector3 (v.x, v.y, -1f);
+		BringForward ();
 
-		transform.GetComponent<SpriteRenderer> ().sortingOrder = 20;
+		float finalHeight = 3f;
+		float speed = CardBehaviour.cardHoverUpSpeed * Time.deltaTime;
+		float zoomSpeed = -CardBehaviour.cardZoomSpeed * Time.deltaTime;
 
-        while(transform.localPosition.y < 2)
-        {
-            Vector3 p = transform.localPosition;
-			float speed = CardBehaviour.cardHoverUpSpeed / (p.y + 1f) * Time.deltaTime;
-            transform.localPosition = new Vector3(p.x, p.y + speed, p.z);
-            yield return null;
-        }
-
-		if (transform.localPosition.y > 2) 
+		while(transform.localPosition.y < finalHeight)
 		{
-			transform.localPosition = new Vector3 (transform.localPosition.x, 2, transform.localPosition.z);
+			Vector3 p = transform.localPosition;
+			transform.localPosition = new Vector3(p.x, p.y + speed, p.z + zoomSpeed);
+			speed -= 0.01f;
+			yield return null;
 		}
-    }
+
+		if (transform.localPosition.y > finalHeight) 
+		{
+			transform.localPosition = new Vector3 (transform.localPosition.x, finalHeight, transform.localPosition.z);
+		}
+	}
 
     IEnumerator HoverDown()
     {
-		Vector3 v = transform.localPosition;
-		transform.localPosition = new Vector3 (v.x, v.y, originalDepth);
-
-		transform.GetComponent<SpriteRenderer> ().sortingOrder = originalLayerOrder;
+		BringBack ();
 
 		float speed = -CardBehaviour.cardHoverDownSpeed * Time.deltaTime;
+		float zoomSpeed = CardBehaviour.cardZoomSpeed * Time.deltaTime;
 
         while (transform.localPosition.y > 0)
         {
             Vector3 p = transform.localPosition;
-            transform.localPosition = new Vector3(p.x, p.y + speed, p.z);
-            yield return null;
+			transform.localPosition = new Vector3(p.x, p.y + speed, p.z + zoomSpeed);
+			yield return null;
         }
 
         if (transform.localPosition.y < 0) 
 		{
-			transform.localPosition = new Vector3(transform.localPosition.x, 0, transform.localPosition.z);
+			transform.localPosition = new Vector3(transform.localPosition.x, 0, originalDepth);
 		}
     }
 
 	void BringForward()
 	{
-		
+		GetComponent<SpriteRenderer>().sortingOrder = 20;
+		canvas.GetComponent<Canvas>().sortingOrder = 20;
 	}
 
 	void BringBack()
 	{
-		
+		GetComponent<SpriteRenderer>().sortingOrder = originalOrder;
+		canvas.GetComponent<Canvas>().sortingOrder = originalOrder;
 	}
 }

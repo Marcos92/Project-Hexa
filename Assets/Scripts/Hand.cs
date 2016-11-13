@@ -21,9 +21,9 @@ public class Hand : MonoBehaviour
 
     void ArrangeCards()
     {
-		float cardSpacingWidth = 1.5f;
-		float cardSpacingDepth = 0.05f;
         int count = cards.Count;
+		float cardSpacingWidth = 5f/count;
+		float cardSpacingDepth = 0.01f;
 		float cardPosition;
 		float cardDepth = 0;
 		int order = 10;
@@ -35,7 +35,12 @@ public class Hand : MonoBehaviour
         {
             Vector3 p = c.transform.localPosition;
 			c.transform.localPosition = new Vector3(cardPosition, p.y, cardDepth);
-			c.transform.GetComponent<SpriteRenderer> ().sortingOrder = order++;
+			c.originalDepth = cardDepth;
+
+			c.originalOrder = order;
+			c.transform.GetComponent<SpriteRenderer> ().sortingOrder = order;
+			c.transform.FindChild ("Canvas").gameObject.GetComponent <Canvas>().sortingOrder = order++;
+
 			cardPosition += cardSpacingWidth;
 			cardDepth -= cardSpacingDepth;
         }
