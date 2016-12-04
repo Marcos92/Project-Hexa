@@ -19,6 +19,7 @@ public class Card : MonoBehaviour
 
 	public float originalDepth;
 	public int originalOrder;
+    //TODO: Add original height
 
 	//Data
 	string title;

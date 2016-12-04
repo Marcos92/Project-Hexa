@@ -22,29 +22,32 @@ public class Hand : MonoBehaviour
     void ArrangeCards()
     {
         int count = cards.Count;
-		float cardSpacingWidth = 5f/count;
-		float cardSpacingDepth = 0.01f;
-        float cardSpacingAngle = 0.1f;
-		float cardPosition;
+		float cardSpacingWidth = 6f/count;
+		float cardSpacingHeight = 0.1f;
+        float cardSpacingDepth = 0.01f;
+        float cardSpacingAngle = 0.05f;
+        float cardPositionX;
+        float cardPositionY;
         float cardRotation;
 		float cardDepth = 0;
 		int order = 10;
 
         if (count % 2 != 0)
         {
-            cardPosition = -(count - 1) * cardSpacingWidth / 2f;
+            cardPositionX = -(count - 1) * cardSpacingWidth / 2f;
+            cardPositionY = -(count - 1) * cardSpacingHeight / 2f;
             cardRotation = (count / 2) * cardSpacingAngle;
         }
         else
         {
-            cardPosition = -(count / 2f - 0.5f) * cardSpacingWidth;
+            cardPositionX = -(count / 2f - 0.5f) * cardSpacingWidth;
+            cardPositionY = -(count / 2f - 0.5f) * cardSpacingHeight;
             cardRotation = (count - 1) * 0.5f * cardSpacingAngle;
         }
 
         foreach(Card c in cards)
         {
-            Vector3 p = c.transform.localPosition;
-			c.transform.localPosition = new Vector3(cardPosition, p.y, cardDepth);
+			c.transform.localPosition = new Vector3(cardPositionX, cardPositionY, cardDepth);
 
             Quaternion r = c.transform.localRotation;
             c.transform.localRotation = new Quaternion(r.x, r.y, cardRotation, r.w);
@@ -55,8 +58,25 @@ public class Hand : MonoBehaviour
 			c.transform.GetComponent<SpriteRenderer> ().sortingOrder = order;
 			c.transform.FindChild ("Canvas").gameObject.GetComponent <Canvas>().sortingOrder = order++;
 
-			cardPosition += cardSpacingWidth;
+            cardPositionX += cardSpacingWidth;
+
+            if(count % 2 == 0 && cards.IndexOf(c) == count / 2) //If it's the card to the right of the middle point (even hand) start decreasing height
+            {
+                cardSpacingHeight *= -1;
+            }
+
+            if (count % 2 != 0 && cards.IndexOf(c) == count / 2) //If it's the middle card (odd hand) start decreasing height
+            {
+                cardSpacingHeight *= -1;
+            }
+
+            if (!(count % 2 == 0 && cards.IndexOf(c) == count / 2 - 1)) //If it's the card to the left of the middle point (even hand) don't add height to next card
+            {
+                cardPositionY += cardSpacingHeight;
+            }
+
             cardRotation -= cardSpacingAngle;
+
 			cardDepth -= cardSpacingDepth;
         }
     }
