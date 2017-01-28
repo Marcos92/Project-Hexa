@@ -23,11 +23,11 @@ public class Hand : MonoBehaviour
     {
         int count = cards.Count;
 		float cardSpacingWidth = 6f/count;
-		float cardSpacingHeight = 0.1f;
+		/*float cardSpacingHeight = 0.2f;
         float cardSpacingDepth = 0.01f;
-        float cardSpacingAngle = 0.05f;
+        float cardSpacingAngle = 0.05f;*/
         float cardPositionX;
-        float cardPositionY;
+        float cardPositionY = 0;
         float cardRotation;
 		float cardDepth = 0;
 		int order = 10;
@@ -35,24 +35,26 @@ public class Hand : MonoBehaviour
         if (count % 2 != 0)
         {
             cardPositionX = -(count - 1) * cardSpacingWidth / 2f;
-            cardPositionY = -(count - 1) * cardSpacingHeight / 2f;
-            cardRotation = (count / 2) * cardSpacingAngle;
+            /*cardPositionY = -(count - 1) * cardSpacingHeight / 2f;
+            cardRotation = (count / 2) * cardSpacingAngle;*/
         }
         else
         {
             cardPositionX = -(count / 2f - 0.5f) * cardSpacingWidth;
-            cardPositionY = -(count / 2f - 0.5f) * cardSpacingHeight;
-            cardRotation = (count - 1) * 0.5f * cardSpacingAngle;
+            /*cardPositionY = -(count / 2f - 0.5f) * cardSpacingHeight;
+            cardRotation = (count - 1) * 0.5f * cardSpacingAngle;*/
         }
 
         foreach(Card c in cards)
         {
 			c.transform.localPosition = new Vector3(cardPositionX, cardPositionY, cardDepth);
 
-            Quaternion r = c.transform.localRotation;
-            c.transform.localRotation = new Quaternion(r.x, r.y, cardRotation, r.w);
+            /*Quaternion r = c.transform.localRotation;
+            c.transform.localRotation = new Quaternion(r.x, r.y, cardRotation, r.w);*/
 
 			c.originalDepth = cardDepth;
+
+            c.originalHeight = c.transform.localPosition.y;
 
 			c.originalOrder = order;
 			c.transform.GetComponent<SpriteRenderer> ().sortingOrder = order;
@@ -60,7 +62,7 @@ public class Hand : MonoBehaviour
 
             cardPositionX += cardSpacingWidth;
 
-            if(count % 2 == 0 && cards.IndexOf(c) == count / 2) //If it's the card to the right of the middle point (even hand) start decreasing height
+            /*if(count % 2 == 0 && cards.IndexOf(c) == count / 2) //If it's the card to the right of the middle point (even hand) start decreasing height
             {
                 cardSpacingHeight *= -1;
             }
@@ -77,7 +79,7 @@ public class Hand : MonoBehaviour
 
             cardRotation -= cardSpacingAngle;
 
-			cardDepth -= cardSpacingDepth;
+			cardDepth -= cardSpacingDepth;*/
         }
     }
 }

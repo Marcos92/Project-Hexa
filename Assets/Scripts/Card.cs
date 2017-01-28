@@ -18,8 +18,8 @@ public class Card : MonoBehaviour
 	GameObject rangeLabel;
 
 	public float originalDepth;
+	public float originalHeight;
 	public int originalOrder;
-    //TODO: Add original height
 
 	//Data
 	string title;
@@ -43,6 +43,32 @@ public class Card : MonoBehaviour
 	//List with all the card effects
 
 	//Creature card constructor
+	public Card(string _title, string _description, int _cost, int _rarity, int _attack, int _maxHealth, int _speed, int _range)
+	{
+		title = _title;
+
+		cost = _cost;
+	
+		description = _description;
+		description.Trim ('-');
+
+		//Tribe assignment
+
+		rarity = _rarity;
+
+		attack = _attack;
+		initialAttack = attack;
+
+		maxHealth = _maxHealth;
+		initialMaxHealth = maxHealth;
+		currentHealth = maxHealth;
+
+		speed = _speed;
+		initialSpeed = speed;
+
+		range = _range;
+		initialRange = range;
+	}
 
 	//Spell card constructor
 
@@ -53,6 +79,7 @@ public class Card : MonoBehaviour
 		canvas = transform.FindChild ("Canvas").gameObject;
 
 		originalDepth = transform.localPosition.z;
+		originalHeight = transform.localPosition.y;
 		originalOrder = GetComponent<SpriteRenderer>().sortingOrder;
 		canvas.GetComponent<Canvas>().sortingOrder = originalOrder;
 
@@ -67,72 +94,73 @@ public class Card : MonoBehaviour
 		tribeLabel = canvas.transform.FindChild ("TribeLabel").gameObject;
 	}
 
-	public void Create(string _title, string _description, int _cost, int _rarity, int _attack, int _maxHealth, int _speed, int _range)
+	/*public void Create(string _title, string _description, int _cost, int _rarity, int _attack, int _maxHealth, int _speed, int _range)
 	{
 		title = _title;
-		nameLabel.GetComponent<Text>().text= title;
 
 		cost = _cost;
-		costLabel.GetComponent<Text>().text= cost.ToString();
 	
 		description = _description;
 		description.Trim ('-');
-		descriptionLabel.GetComponent<Text>().text= description;
 
-		//Tribe assignment and label here
+		//Tribe assignment
 
 		rarity = _rarity;
-		//Assign respective rarity gem
 
 		attack = _attack;
 		initialAttack = attack;
-		attackLabel.GetComponent<Text>().text= attack.ToString();
 
 		maxHealth = _maxHealth;
 		initialMaxHealth = maxHealth;
 		currentHealth = maxHealth;
-		healthLabel.GetComponent<Text>().text= maxHealth.ToString();
 
 		speed = _speed;
 		initialSpeed = speed;
-		speedLabel.GetComponent<Text>().text= speed.ToString();
 
 		range = _range;
 		initialRange = range;
-		rangeLabel.GetComponent<Text>().text= range.ToString();
+	}*/
 
-		Print();
+	public void Create()
+	{
+		nameLabel.GetComponent<Text>().text= title;
+		costLabel.GetComponent<Text>().text= cost.ToString();
+		descriptionLabel.GetComponent<Text>().text= description;
+		attackLabel.GetComponent<Text>().text= attack.ToString();
+		healthLabel.GetComponent<Text>().text= maxHealth.ToString();
+		speedLabel.GetComponent<Text>().text= speed.ToString();
+		rangeLabel.GetComponent<Text>().text= range.ToString();
 	}
 
 	public void Print()
 	{
-		Debug.Log (title + "\t" + description + "\n" + "Rarity: " + rarity + "\tCost: " + cost + "\tStats: " + attack + "/" + maxHealth + "/" + speed + "/" + range);
+		Debug.print (title + "\t" + description + "\n" + "Rarity: " + rarity + "\tCost: " + cost + "\tStats: " + attack + "/" + maxHealth + "/" + speed + "/" + range);
 	}
 
 	void OnMouseEnter()
 	{
-		StopCoroutine("HoverDown");
-		StartCoroutine("HoverUp");
+		/*StopCoroutine("HoverDown");
+		StartCoroutine("HoverUp");*/
 	}
 
     void OnMouseExit()
     {
-        StopCoroutine("HoverUp");
-        StartCoroutine("HoverDown");
+        /*StopCoroutine("HoverUp");
+        StartCoroutine("HoverDown");*/
     }
 
     IEnumerator HoverUp()
     {
 		BringForward ();
 
-		float finalHeight = 3f;
+		float finalHeight = originalHeight + 2f;
 		float speed = CardBehaviour.cardHoverUpSpeed * Time.deltaTime;
 		float zoomSpeed = -CardBehaviour.cardZoomSpeed * Time.deltaTime;
 
 		while(transform.localPosition.y < finalHeight)
 		{
 			Vector3 p = transform.localPosition;
-			transform.localPosition = new Vector3(p.x, p.y + speed, p.z + zoomSpeed);
+			transform.localPosition += transform.up.normalized * speed + transform.forward.normalized * zoomSpeed;
 			speed -= 0.01f;
 			yield return null;
 		}
@@ -150,14 +178,14 @@ public class Card : MonoBehaviour
 		float speed = -CardBehaviour.cardHoverDownSpeed * Time.deltaTime;
 		float zoomSpeed = CardBehaviour.cardZoomSpeed * Time.deltaTime;
 
-        while (transform.localPosition.y > 0)
+        while (transform.localPosition.y > originalHeight)
         {
             Vector3 p = transform.localPosition;
-			transform.localPosition = new Vector3(p.x, p.y + speed, p.z + zoomSpeed);
+			transform.localPosition += transform.up.normalized * speed + transform.forward.normalized * zoomSpeed;
 			yield return null;
         }
 
-        if (transform.localPosition.y < 0) 
+        if (transform.localPosition.y < originalHeight) 
 		{
 			transform.localPosition = new Vector3(transform.localPosition.x, 0, originalDepth);
 		}
