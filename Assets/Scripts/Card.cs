@@ -21,6 +21,10 @@ public class Card : MonoBehaviour
 	public float originalHeight;
 	public int originalOrder;
 
+	float cardHoverUpSpeed = 15f;
+	float cardHoverDownSpeed = 20f;
+	float cardZoomSpeed = 1f;
+
 	//Data
 	string title;
 	string description;
@@ -154,8 +158,8 @@ public class Card : MonoBehaviour
 		BringForward ();
 
 		float finalHeight = originalHeight + 2f;
-		float speed = CardBehaviour.cardHoverUpSpeed * Time.deltaTime;
-		float zoomSpeed = -CardBehaviour.cardZoomSpeed * Time.deltaTime;
+		float speed = cardHoverUpSpeed * Time.deltaTime;
+		float zoomSpeed = -cardZoomSpeed * Time.deltaTime;
 
 		while(transform.localPosition.y < finalHeight)
 		{
@@ -175,8 +179,8 @@ public class Card : MonoBehaviour
     {
 		BringBack ();
 
-		float speed = -CardBehaviour.cardHoverDownSpeed * Time.deltaTime;
-		float zoomSpeed = CardBehaviour.cardZoomSpeed * Time.deltaTime;
+		float speed = -cardHoverDownSpeed * Time.deltaTime;
+		float zoomSpeed = cardZoomSpeed * Time.deltaTime;
 
         while (transform.localPosition.y > originalHeight)
         {
