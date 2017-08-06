@@ -46,39 +46,45 @@ public class Card : MonoBehaviour
 
 	//List with all the card effects
 
-	//Creature card constructor
-	public Card(string _title, string _description, int _cost, int _rarity, int _attack, int _maxHealth, int _speed, int _range)
+	void Start()
 	{
-		title = _title;
+		
+	}
 
-		cost = _cost;
+	//Creature card constructor
+	public void CreateCreatureFromInfo(CardInfo info)
+	{
+		title = info.title;
+
+		cost = info.cost;
 	
-		description = _description;
-		description.Trim ('-');
+		description = info.description;
 
 		//Tribe assignment
 
-		rarity = _rarity;
+		rarity = info.rarity;
 
-		attack = _attack;
+		attack = info.attack;
 		initialAttack = attack;
 
-		maxHealth = _maxHealth;
+		maxHealth = info.health;
 		initialMaxHealth = maxHealth;
 		currentHealth = maxHealth;
 
-		speed = _speed;
+		speed = info.speed;
 		initialSpeed = speed;
 
-		range = _range;
+		range = info.range;
 		initialRange = range;
+
+		CreateVisual();
 	}
 
 	//Spell card constructor
 
 	//Trap card constructor
 
-	void Start()
+	public void CreateVisual()
 	{
 		canvas = transform.Find ("Canvas").gameObject;
 
@@ -96,44 +102,14 @@ public class Card : MonoBehaviour
 		costLabel = canvas.transform.Find ("CostLabel").gameObject;
 		descriptionLabel = canvas.transform.Find ("DescriptionLabel").gameObject;
 		tribeLabel = canvas.transform.Find ("TribeLabel").gameObject;
-	}
-
-	/*public void Create(string _title, string _description, int _cost, int _rarity, int _attack, int _maxHealth, int _speed, int _range)
-	{
-		title = _title;
-
-		cost = _cost;
-	
-		description = _description;
-		description.Trim ('-');
-
-		//Tribe assignment
-
-		rarity = _rarity;
-
-		attack = _attack;
-		initialAttack = attack;
-
-		maxHealth = _maxHealth;
-		initialMaxHealth = maxHealth;
-		currentHealth = maxHealth;
-
-		speed = _speed;
-		initialSpeed = speed;
-
-		range = _range;
-		initialRange = range;
-	}*/
-
-	public void Create()
-	{
-		nameLabel.GetComponent<Text>().text= title;
-		costLabel.GetComponent<Text>().text= cost.ToString();
-		descriptionLabel.GetComponent<Text>().text= description;
-		attackLabel.GetComponent<Text>().text= attack.ToString();
-		healthLabel.GetComponent<Text>().text= maxHealth.ToString();
-		speedLabel.GetComponent<Text>().text= speed.ToString();
-		rangeLabel.GetComponent<Text>().text= range.ToString();
+		
+		nameLabel.GetComponent<Text>().text = title;
+		costLabel.GetComponent<Text>().text = cost.ToString();
+		descriptionLabel.GetComponent<Text>().text = description;
+		attackLabel.GetComponent<Text>().text = attack.ToString();
+		healthLabel.GetComponent<Text>().text = maxHealth.ToString();
+		speedLabel.GetComponent<Text>().text = speed.ToString();
+		rangeLabel.GetComponent<Text>().text = range.ToString();
 	}
 
 	public void Print()

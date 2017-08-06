@@ -5,12 +5,18 @@ using UnityEngine;
 public class CardManager : MonoBehaviour 
 {
 	private List<Card> hand; 
-	private List<Card> deck; 
+	private List<Card> deck;
+
+	public Transform handTransform;
+	public Transform deckTransform;
+
+	public GameObject cardPrefab; 
 
 	// Use this for initialization
 	void Start () 
 	{
-		
+		BuildDeck();
+		BuildHand();
 	}
 	
 	// Update is called once per frame
@@ -23,9 +29,17 @@ public class CardManager : MonoBehaviour
 
 	void BuildHand()
     {
-        foreach(Card c in GetComponentsInChildren<Card>()) hand.Add(c);
+		hand = new List<Card>();
+
+        foreach(Card c in handTransform.GetComponentsInChildren<Card>()) hand.Add(c);
 
         ArrangeHand();
+	}
+
+	void Draw(Card c) //TEMPORARY
+	{
+		hand.Add(c);
+		GameObject newCard = Instantiate(cardPrefab, handTransform.position, handTransform.rotation);
 	}
 
 	void ArrangeHand()
@@ -104,9 +118,13 @@ public class CardManager : MonoBehaviour
 
 	public void BuildDeck()
 	{
+		deck = new List<Card>();
+		
 		for(int i = 0; i < 30; i++)
 		{
-			deck.Add(Database.cardDatabase[i]);
+			GameObject c = Instantiate(cardPrefab, deckTransform.position, deckTransform.rotation);
+			c.GetComponent<Card>().CreateCreatureFromInfo(Database.cardDatabase[i]);
+			deck.Add(c.GetComponent<Card>());
 		}
 
 		PrintDeck();

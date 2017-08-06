@@ -53,13 +53,13 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\BoardManager.cs" />
      <Compile Include="Assets\Scripts\Card.cs" />
+     <Compile Include="Assets\Scripts\CardInfo.cs" />
      <Compile Include="Assets\Scripts\CardManager.cs" />
      <Compile Include="Assets\Scripts\Cell.cs" />
      <Compile Include="Assets\Scripts\Creature.cs" />
      <Compile Include="Assets\Scripts\Database.cs" />
      <Compile Include="Assets\Scripts\Debug.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
-     <Compile Include="Assets\Scripts\Hand.cs" />
      <Compile Include="Assets\Scripts\UIManager.cs" />
      <None Include="Assets\creaturesDatabase.txt" />
  <Reference Include="UnityEngine.UI">
