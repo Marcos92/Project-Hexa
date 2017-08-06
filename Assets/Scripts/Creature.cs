@@ -4,7 +4,7 @@ using System.Collections;
 public class Creature : MonoBehaviour
 {
     public int cost, attack, health, speed, range;
-    public bool moved = false, attacked = false;
+    public int moves = 1, attacks = 1;
     public bool ally;
 
 	void Start ()

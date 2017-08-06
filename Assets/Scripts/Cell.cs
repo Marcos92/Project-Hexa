@@ -22,6 +22,7 @@ public class Cell : MonoBehaviour
 
     [HideInInspector]
     public Color color;
+    //[HideInInspector]
     public Color oldColor;
 
     //Events
@@ -79,5 +80,11 @@ public class Cell : MonoBehaviour
     void OnMouseDown()
     {
         OnClickCell(this);
+    }
+
+    void OnMouseOver()
+    {
+        ChangeColor(highlightColor);
+        //Show card details and stuff
     }
 }

@@ -131,35 +131,47 @@ public class BoardManager : MonoBehaviour
 
     void SelectCell(Cell c)
     {
-        /*if (GetSelectedCell() != null)
+        if(c.creature.moves > 0)
         {
-            GetSelectedCell().Deselect();
+            foreach(Cell cell in GetCellsInRange(c))
+            {
+                cell.ChangeColor(c.rangeColor);
+            }
         }
 
-        if(!creature.moved)
+        if(c.creature.attacks > 0)
         {
-            GetCellsInRange(this, creature.speed);
-            ChangeColor(rangeColor, grid.cellsInRange);
+            foreach(Cell cell in GetEnemiesInRange(c))
+            {
+                cell.ChangeColor(c.canAttackColor);
+            }
         }
 
-        if(!creature.attacked)
-        {
-            grid.GetEnemiesInRange(this, creature.range);
-            ChangeColor(canAttackColor, grid.enemiesInRange);
-        }
-
-        ChangeColor(selectedColor);*/
+        c.oldColor = c.selectedColor;
+        //c.ChangeColor(c.selectedColor);
         c.selected = true;
     }
 
     void DeselectCell()
     {
-        //ChangeColor(normalColor, grid.cellsInRange);
-        /*grid.cellsInRange.Clear();
-        ChangeColor(normalColor);*/
         if(GetSelectedCell() != null)
         {
-            GetSelectedCell().selected = false;
+            Cell c = GetSelectedCell();
+            c.selected = false;
+            c.oldColor = c.allyColor;
+            c.ChangeColor(c.allyColor);
+
+            foreach(Cell cell in GetCellsInRange(c))
+            {
+                cell.oldColor = c.normalColor;
+                cell.ChangeColor(c.normalColor);
+            }
+
+            foreach(Cell cell in GetEnemiesInRange(c))
+            {
+                cell.oldColor = c.enemyColor;
+                cell.ChangeColor(c.enemyColor);
+            }
         }
     }
 
@@ -178,10 +190,10 @@ public class BoardManager : MonoBehaviour
         destination.creature = temp;
         GetSelectedCell().creature = null;
         DeselectCell();
-        destination.creature.moved = true;
+        destination.creature.moves--;
 
         //Update target list
-        if (!destination.creature.attacked)
+        if (destination.creature.attacks > 0)
         {
             SelectCell(destination);
         }
@@ -191,8 +203,8 @@ public class BoardManager : MonoBehaviour
     {
         //Attack calculations
 
-        GetSelectedCell().creature.attacked = true;
-        if (GetSelectedCell().creature.moved) DeselectCell();
+        GetSelectedCell().creature.attacks--;
+        if (GetSelectedCell().creature.moves == 0) DeselectCell();
     }
 
     //Events
@@ -200,7 +212,6 @@ public class BoardManager : MonoBehaviour
     void HandleEnterCell(Cell c)
     {
         c.oldColor = c.color;
-        c.ChangeColor(c.highlightColor);
     }
 
     void HandleExitCell(Cell c)
@@ -212,7 +223,10 @@ public class BoardManager : MonoBehaviour
     {
         if(GetSelectedCell() == null)
         {
-            SelectCell(c);
+            if(c.creature != null)
+            {
+                SelectCell(c);
+            }
         }
         else
         {
