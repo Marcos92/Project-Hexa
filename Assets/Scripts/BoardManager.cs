@@ -45,6 +45,11 @@ public class BoardManager : MonoBehaviour
             Summon(cells[20], evilCreature);
             Summon(cells[40], evilCreature);
         }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            DeselectCell();
+        }
 	}
 
     public List<Cell> GetCellsInRange(Cell c)
@@ -152,7 +157,10 @@ public class BoardManager : MonoBehaviour
         //ChangeColor(normalColor, grid.cellsInRange);
         /*grid.cellsInRange.Clear();
         ChangeColor(normalColor);*/
-        GetSelectedCell().selected = false;
+        if(GetSelectedCell() != null)
+        {
+            GetSelectedCell().selected = false;
+        }
     }
 
     public void Summon (Cell cell, Creature newCreature)
@@ -160,10 +168,10 @@ public class BoardManager : MonoBehaviour
         Creature c = Instantiate(newCreature, transform.position, transform.rotation) as Creature;
         cell.creature = c;
 
-        cell.ChangeColor(cell.allyColor);
+        cell.ChangeColor(cell.creature.ally ? cell.allyColor : cell.enemyColor);
     }
 
-    public void MoveCreature(Cell destination)
+    public void Move(Cell destination)
     {
         //Move creature
         Creature temp = GetSelectedCell().creature;
@@ -191,24 +199,38 @@ public class BoardManager : MonoBehaviour
 
     void HandleEnterCell(Cell c)
     {
+        c.oldColor = c.color;
         c.ChangeColor(c.highlightColor);
     }
 
     void HandleExitCell(Cell c)
     {
-        if (c.selected) c.ChangeColor(c.selectedColor);
-        else if (c.creature != null && c.creature.ally) c.ChangeColor(c.allyColor);
-        else if (c.creature != null && GetEnemiesInRange(c).Contains(c)) c.ChangeColor(c.canAttackColor);
-        else if (c.creature != null) c.ChangeColor(c.enemyColor);
-        else if (GetCellsInRange(c).Contains(c)) c.ChangeColor(c.rangeColor);
-        else c.ChangeColor(c.normalColor);
+        c.ChangeColor(c.oldColor);
     }
 
     void HandleClickCell(Cell c)
     {
-        if (c.selected) DeselectCell(); //Selected cell
-        else if (!GetCellsInRange(c).Contains(c) && c.creature != null && c.creature.ally) SelectCell(c); //Ally creature cell
-        else if (GetEnemiesInRange(c).Contains(c)) Attack(c); //Enemy creature cell
-        else if (GetCellsInRange(c).Contains(c)) MoveCreature(c); //Cell in creature move range*/
+        if(GetSelectedCell() == null)
+        {
+            SelectCell(c);
+        }
+        else
+        {
+            if(c.creature == null)
+            {
+                Move(c);
+            }
+            else
+            {
+                if(c.creature.ally)
+                {
+                    SelectCell(c);
+                }
+                else
+                {
+                    Attack(c);
+                }
+            }
+        }
     }
 }

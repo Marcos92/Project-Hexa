@@ -58,7 +58,7 @@ public class Hand : MonoBehaviour
 
 			c.originalOrder = order;
 			c.transform.GetComponent<SpriteRenderer> ().sortingOrder = order;
-			c.transform.FindChild ("Canvas").gameObject.GetComponent <Canvas>().sortingOrder = order++;
+			c.transform.Find ("Canvas").gameObject.GetComponent <Canvas>().sortingOrder = order++;
 
             cardPositionX += cardSpacingWidth;
 

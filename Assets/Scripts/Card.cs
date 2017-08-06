@@ -80,22 +80,22 @@ public class Card : MonoBehaviour
 
 	void Start()
 	{
-		canvas = transform.FindChild ("Canvas").gameObject;
+		canvas = transform.Find ("Canvas").gameObject;
 
 		originalDepth = transform.localPosition.z;
 		originalHeight = transform.localPosition.y;
 		originalOrder = GetComponent<SpriteRenderer>().sortingOrder;
 		canvas.GetComponent<Canvas>().sortingOrder = originalOrder;
 
-		attackLabel = canvas.transform.FindChild ("AttackLabel").gameObject;
-		healthLabel = canvas.transform.FindChild ("HealthLabel").gameObject;
-		speedLabel = canvas.transform.FindChild ("SpeedLabel").gameObject;
-		rangeLabel = canvas.transform.FindChild ("RangeLabel").gameObject;
+		attackLabel = canvas.transform.Find ("AttackLabel").gameObject;
+		healthLabel = canvas.transform.Find ("HealthLabel").gameObject;
+		speedLabel = canvas.transform.Find ("SpeedLabel").gameObject;
+		rangeLabel = canvas.transform.Find ("RangeLabel").gameObject;
 
-		nameLabel = canvas.transform.FindChild ("NameLabel").gameObject;
-		costLabel = canvas.transform.FindChild ("CostLabel").gameObject;
-		descriptionLabel = canvas.transform.FindChild ("DescriptionLabel").gameObject;
-		tribeLabel = canvas.transform.FindChild ("TribeLabel").gameObject;
+		nameLabel = canvas.transform.Find ("NameLabel").gameObject;
+		costLabel = canvas.transform.Find ("CostLabel").gameObject;
+		descriptionLabel = canvas.transform.Find ("DescriptionLabel").gameObject;
+		tribeLabel = canvas.transform.Find ("TribeLabel").gameObject;
 	}
 
 	/*public void Create(string _title, string _description, int _cost, int _rarity, int _attack, int _maxHealth, int _speed, int _range)

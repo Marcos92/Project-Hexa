@@ -20,6 +20,10 @@ public class Cell : MonoBehaviour
     public Color enemyColor;
     public Color canAttackColor;
 
+    [HideInInspector]
+    public Color color;
+    public Color oldColor;
+
     //Events
     public delegate void EnterCell(Cell c); 
     public static event EnterCell OnEnterCell;
@@ -56,12 +60,13 @@ public class Cell : MonoBehaviour
 
     public void ChangeColor(Color color)
     {
-        GetComponent<SpriteRenderer>().color = color;
+        this.color = color;
+        GetComponent<SpriteRenderer>().color = this.color;
     }
 
     //Mouse events
 
-    void OnMouseOver()
+    void OnMouseEnter()
     {
         OnEnterCell(this);
     }
