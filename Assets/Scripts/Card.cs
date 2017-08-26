@@ -26,6 +26,8 @@ public class Card : MonoBehaviour
 	float cardZoomSpeed = 1f;
 
 	//Data
+	public CardInfo info;
+
 	string title;
 	string description;
 
@@ -37,23 +39,42 @@ public class Card : MonoBehaviour
 	int initialSpeed;
 	int initialRange;
 
+	int currentHealth;
 	int maxHealth;
 	int attack;
 	int speed;
 	int range;
 
-	int currentHealth;
-
 	//List with all the card effects
+
+	public Card(CardInfo i)
+	{
+		info = i;
+	}
 
 	void Start()
 	{
 		
 	}
 
-	//Creature card constructor
-	public void CreateCreatureFromInfo(CardInfo info)
+	public CardInfo GetCurrentInfo() //When cards are modified while in deck we need to get the current stats, not the original ones
 	{
+		CardInfo i = info;
+
+		i.attack = attack;
+		i.currentHealth = currentHealth;
+		i.health = maxHealth;
+		i.speed = speed;
+		i.range = range;
+
+		return i;
+	}
+
+	//Creature card constructor
+	public void Create(CardInfo i)
+	{
+		info = i;
+
 		title = info.title;
 
 		cost = info.cost;
@@ -69,7 +90,7 @@ public class Card : MonoBehaviour
 
 		maxHealth = info.health;
 		initialMaxHealth = maxHealth;
-		currentHealth = maxHealth;
+		currentHealth = info.currentHealth;
 
 		speed = info.speed;
 		initialSpeed = speed;
@@ -114,7 +135,7 @@ public class Card : MonoBehaviour
 
 	public void Print()
 	{
-		Debug.print (title + "\t" + description + "\n" + "Rarity: " + rarity + "\tCost: " + cost + "\tStats: " + attack + "/" + maxHealth + "/" + speed + "/" + range);
+		Debug.Log (title + "\t" + description + "\n" + "Rarity: " + rarity + "\tCost: " + cost + "\tStats: " + attack + "/" + maxHealth + "/" + speed + "/" + range);
 	}
 
 	void OnMouseEnter()

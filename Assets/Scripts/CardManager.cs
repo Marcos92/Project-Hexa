@@ -25,21 +25,31 @@ public class CardManager : MonoBehaviour
 		
 	}
 
+	private void InstantiateCard(Card card, Vector3 position, Quaternion rotation)
+	{
+		GameObject newCard = Instantiate(cardPrefab, position, rotation);
+		newCard.transform.parent = handTransform;
+		newCard.GetComponent<Card>().Create(card.GetCurrentInfo());
+	}
+
 	//HAND
 
 	void BuildHand()
     {
 		hand = new List<Card>();
 
-        foreach(Card c in handTransform.GetComponentsInChildren<Card>()) hand.Add(c);
+        for(int i = 0; i < 5; i++) 
+		{
+			Draw(deck[i]);
+		}
 
         ArrangeHand();
 	}
 
-	void Draw(Card c) //TEMPORARY
+	void Draw(Card card) //TEMPORARY
 	{
-		hand.Add(c);
-		GameObject newCard = Instantiate(cardPrefab, handTransform.position, handTransform.rotation);
+		hand.Add(card);
+		InstantiateCard(card, handTransform.position, handTransform.rotation);
 	}
 
 	void ArrangeHand()
@@ -51,7 +61,7 @@ public class CardManager : MonoBehaviour
         float cardSpacingAngle = 0.05f;*/
         float cardPositionX;
         float cardPositionY = 0;
-        float cardRotation;
+        //float cardRotation;
 		float cardDepth = 0;
 		int order = 10;
 
@@ -68,20 +78,32 @@ public class CardManager : MonoBehaviour
             cardRotation = (count - 1) * 0.5f * cardSpacingAngle;*/
         }
 
-        foreach(Card c in hand)
+		Transform[] children = new Transform[handTransform.childCount];
+
+		for(int i = 0; i < handTransform.childCount; i++)
+		{
+			children[i] = handTransform.GetChild(i);
+		}
+
+        foreach(Transform t in children)
         {
-			c.transform.localPosition = new Vector3(cardPositionX, cardPositionY, cardDepth);
+			GameObject obj = t.gameObject;
+			Card card = obj.GetComponent<Card>();
+
+			Debug.Log(t);
+
+			obj.transform.localPosition = new Vector3(cardPositionX, cardPositionY, cardDepth);
 
             /*Quaternion r = c.transform.localRotation;
             c.transform.localRotation = new Quaternion(r.x, r.y, cardRotation, r.w);*/
 
-			c.originalDepth = cardDepth;
+			card.originalDepth = cardDepth;
 
-            c.originalHeight = c.transform.localPosition.y;
+            card.originalHeight = obj.transform.localPosition.y;
 
-			c.originalOrder = order;
-			c.transform.GetComponent<SpriteRenderer> ().sortingOrder = order;
-			c.transform.Find ("Canvas").gameObject.GetComponent <Canvas>().sortingOrder = order++;
+			card.originalOrder = order;
+			obj.transform.GetComponent<SpriteRenderer> ().sortingOrder = order;
+			obj.transform.Find ("Canvas").gameObject.GetComponent <Canvas>().sortingOrder = order++;
 
             cardPositionX += cardSpacingWidth;
 
@@ -122,12 +144,13 @@ public class CardManager : MonoBehaviour
 		
 		for(int i = 0; i < 30; i++)
 		{
-			GameObject c = Instantiate(cardPrefab, deckTransform.position, deckTransform.rotation);
-			c.GetComponent<Card>().CreateCreatureFromInfo(Database.cardDatabase[i]);
-			deck.Add(c.GetComponent<Card>());
+			/* GameObject c = Instantiate(cardPrefab, deckTransform.position, deckTransform.rotation);
+			c.GetComponent<Card>().CreateCreatureFromInfo(Database.cardDatabase[i]); */
+			Card c = new Card(Database.cardDatabase[i]);
+			deck.Add(c);
 		}
 
-		PrintDeck();
+		//PrintDeck();
 	}
 
 	public int CountDeck()

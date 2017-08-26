@@ -10,6 +10,7 @@ public class CardInfo
 	public int cost;
 	public int rarity;
 
+	public int currentHealth;
 	public int health;
 	public int attack;
 	public int speed;
@@ -29,7 +30,7 @@ public class CardInfo
 		rarity = _rarity;
 
 		attack = _attack;
-		health = _health;
+		health = currentHealth = _health;
 		speed = _speed;
 		range = _range;
 	}
