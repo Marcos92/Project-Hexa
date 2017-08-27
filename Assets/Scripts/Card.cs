@@ -47,6 +47,10 @@ public class Card : MonoBehaviour
 
 	//List with all the card effects
 
+	//Events
+    public delegate void ClickCell(Card c); 
+    public static event ClickCell OnClickCard;
+
 	public Card(CardInfo i)
 	{
 		info = i;
@@ -63,7 +67,7 @@ public class Card : MonoBehaviour
 
 		i.attack = attack;
 		i.currentHealth = currentHealth;
-		i.health = maxHealth;
+		i.maxHealth = maxHealth;
 		i.speed = speed;
 		i.range = range;
 
@@ -88,7 +92,7 @@ public class Card : MonoBehaviour
 		attack = info.attack;
 		initialAttack = attack;
 
-		maxHealth = info.health;
+		maxHealth = info.maxHealth;
 		initialMaxHealth = maxHealth;
 		currentHealth = info.currentHealth;
 
@@ -137,18 +141,6 @@ public class Card : MonoBehaviour
 	{
 		Debug.Log (title + "\t" + description + "\n" + "Rarity: " + rarity + "\tCost: " + cost + "\tStats: " + attack + "/" + maxHealth + "/" + speed + "/" + range);
 	}
-
-	void OnMouseEnter()
-	{
-		/*StopCoroutine("HoverDown");
-		StartCoroutine("HoverUp");*/
-	}
-
-    void OnMouseExit()
-    {
-        /*StopCoroutine("HoverUp");
-        StartCoroutine("HoverDown");*/
-    }
 
     IEnumerator HoverUp()
     {
@@ -203,4 +195,23 @@ public class Card : MonoBehaviour
 		GetComponent<SpriteRenderer>().sortingOrder = originalOrder;
 		canvas.GetComponent<Canvas>().sortingOrder = originalOrder;
 	}
+
+	//Mouse events
+
+	void OnMouseEnter()
+	{
+		/*StopCoroutine("HoverDown");
+		StartCoroutine("HoverUp");*/
+	}
+
+    void OnMouseExit()
+    {
+        /*StopCoroutine("HoverUp");
+        StartCoroutine("HoverDown");*/
+    }
+
+    void OnMouseDown()
+    {
+        OnClickCard(this);
+    }
 }

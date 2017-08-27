@@ -10,13 +10,17 @@ public class CardManager : MonoBehaviour
 	public Transform handTransform;
 	public Transform deckTransform;
 
-	public GameObject cardPrefab; 
+	public GameObject cardPrefab;
+
+	public Card selectedCard; 
 
 	// Use this for initialization
 	void Start () 
 	{
 		BuildDeck();
 		BuildHand();
+
+		Card.OnClickCard += HandleClickCard;
 	}
 	
 	// Update is called once per frame
@@ -46,7 +50,7 @@ public class CardManager : MonoBehaviour
         ArrangeHand();
 	}
 
-	void Draw(Card card) //TEMPORARY
+	void Draw(Card card)
 	{
 		hand.Add(card);
 		InstantiateCard(card, handTransform.position, handTransform.rotation);
@@ -56,9 +60,9 @@ public class CardManager : MonoBehaviour
     {
         int count = hand.Count;
 		float cardSpacingWidth = 6f/count;
-		/*float cardSpacingHeight = 0.2f;
+		//float cardSpacingHeight = 0.2f;
         float cardSpacingDepth = 0.01f;
-        float cardSpacingAngle = 0.05f;*/
+        //float cardSpacingAngle = 0.05f;
         float cardPositionX;
         float cardPositionY = 0;
         //float cardRotation;
@@ -122,9 +126,9 @@ public class CardManager : MonoBehaviour
                 cardPositionY += cardSpacingHeight;
             }
 
-            cardRotation -= cardSpacingAngle;
+            cardRotation -= cardSpacingAngle;*/
 
-			cardDepth -= cardSpacingDepth;*/
+			cardDepth -= cardSpacingDepth;
         }
     }
 
@@ -179,5 +183,13 @@ public class CardManager : MonoBehaviour
 		{
 			c.Print();
 		}
+	}
+
+	// EVENTS
+
+	void HandleClickCard(Card c)
+	{
+		selectedCard = c;
+		selectedCard.Print();
 	}
 }

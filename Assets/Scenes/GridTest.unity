@@ -162,7 +162,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &959879739
 GameObject:
@@ -291,9 +291,11 @@ GameObject:
   m_Component:
   - component: {fileID: 2067827642}
   - component: {fileID: 2067827641}
+  - component: {fileID: 2067827645}
+  - component: {fileID: 2067827644}
   - component: {fileID: 2067827643}
   m_Layer: 0
-  m_Name: Game
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -307,15 +309,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2067827640}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38f4f475c905c2445a5fdcef43d166e7, type: 3}
+  m_Script: {fileID: 11500000, guid: a06eaa313722de243894b49b2c6cefa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cell: {fileID: 11453446, guid: ceccbf6075874824892262146323575c, type: 2}
-  sizeX: 10
-  sizeZ: 10
-  allyCreature: {fileID: 11422770, guid: 6b6106245a3a8d84e85b6d561ed060a6, type: 2}
-  evilCreature: {fileID: 11422770, guid: 8f1ad550c752f6c45b711ef1550e7db2, type: 2}
-  grid: {fileID: 690654083}
 --- !u!4 &2067827642
 Transform:
   m_ObjectHideFlags: 0
@@ -327,9 +323,20 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2067827643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2067827640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78edc7da69394914ea1c255b925f0b05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2067827644
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -343,3 +350,19 @@ MonoBehaviour:
   handTransform: {fileID: 959879740}
   deckTransform: {fileID: 504953941}
   cardPrefab: {fileID: 188058, guid: 8ff569b8a53005e48bfbd3400196b0b1, type: 2}
+  selectedCard: {fileID: 0}
+--- !u!114 &2067827645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2067827640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38f4f475c905c2445a5fdcef43d166e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cell: {fileID: 11453446, guid: ceccbf6075874824892262146323575c, type: 2}
+  sizeX: 10
+  sizeZ: 10
+  grid: {fileID: 690654083}

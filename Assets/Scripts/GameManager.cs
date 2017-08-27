@@ -4,21 +4,28 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour 
 {
-	CardManager cards;
-	BoardManager board;
-	UIManager ui;
+	public static GameManager instance = null;
 
-	// Use this for initialization
-	void Start () 
+	private static CardManager cards;
+	private static BoardManager board;
+	private static UIManager ui;
+
+	void Awake()
 	{
-		cards = new CardManager();
-		board = new BoardManager();
-		ui = new UIManager();
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
+		if (instance == null)
+			instance = this;
+		else if (instance != this)
+			Destroy(gameObject);    
 		
+		//DontDestroyOnLoad(gameObject);
+		
+		cards = GetComponent<CardManager>();
+		board = GetComponent<BoardManager>();
+		ui = GetComponent<UIManager>();
+	}
+
+	public static Card GetSelectedCard()
+	{
+		return cards.selectedCard;
 	}
 }

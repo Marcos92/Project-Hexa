@@ -4,10 +4,9 @@ using System.Collections.Generic;
 public class BoardManager : MonoBehaviour
 {
     List<Cell> cells;
-    [HideInInspector]
     public Cell cell;
     public int sizeX = 10, sizeZ = 10;
-    public Creature allyCreature, evilCreature; //DELETE LATER
+    //public Creature allyCreature, evilCreature; //DELETE LATER
     public GameObject grid;
 
 	void Start ()
@@ -38,13 +37,13 @@ public class BoardManager : MonoBehaviour
 
 	void Update ()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        /* if (Input.GetKeyDown(KeyCode.Space))
         {
             Summon(cells[0], allyCreature);
             Summon(cells[1], evilCreature);
             Summon(cells[20], evilCreature);
             Summon(cells[40], evilCreature);
-        }
+        } */
 
         if (Input.GetMouseButtonDown(1))
         {
@@ -57,7 +56,7 @@ public class BoardManager : MonoBehaviour
         List<Cell> list = new List<Cell>();
         if(c.creature == null) return list;
 
-        int range = c.creature.range;
+        int range = c.creature.card.info.range;
 
         int maxX = c.x + range;
         int minX = c.x - range;
@@ -83,7 +82,7 @@ public class BoardManager : MonoBehaviour
         List<Cell> list = new List<Cell>();
         if(c.creature == null) return list;
 
-        int range = c.creature.range;
+        int range = c.creature.card.info.range;
 
         int maxX = c.x + range;
         int minX = c.x - range;
@@ -175,11 +174,9 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public void Summon (Cell cell, Creature newCreature)
+    public void Summon (Cell cell, Card card, bool isAlly)
     {
-        Creature c = Instantiate(newCreature, transform.position, transform.rotation) as Creature;
-        cell.creature = c;
-
+        cell.creature = new Creature(card, isAlly);
         cell.ChangeColor(cell.creature.ally ? cell.allyColor : cell.enemyColor);
     }
 
@@ -221,28 +218,38 @@ public class BoardManager : MonoBehaviour
 
     void HandleClickCell(Cell c)
     {
-        if(GetSelectedCell() == null)
+        if(GameManager.GetSelectedCard() != null)
         {
-            if(c.creature != null)
+            if(c.Empty())
             {
-                SelectCell(c);
+                Summon(c, GameManager.GetSelectedCard(), true);
             }
         }
         else
         {
-            if(c.creature == null)
+            if(GetSelectedCell() == null)
             {
-                Move(c);
-            }
-            else
-            {
-                if(c.creature.ally)
+                if(c.creature != null)
                 {
                     SelectCell(c);
                 }
+            }
+            else
+            {
+                if(c.creature == null)
+                {
+                    Move(c);
+                }
                 else
                 {
-                    Attack(c);
+                    if(c.creature.ally)
+                    {
+                        SelectCell(c);
+                    }
+                    else
+                    {
+                        Attack(c);
+                    }
                 }
             }
         }

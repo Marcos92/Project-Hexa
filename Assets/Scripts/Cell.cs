@@ -43,6 +43,11 @@ public class Cell : MonoBehaviour
 	
 	}
 
+    public bool Empty()
+    {
+        return creature == null;
+    }
+
     //Setup
 
     public void AssignGrid(GameObject g)
