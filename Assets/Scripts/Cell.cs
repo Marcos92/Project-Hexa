@@ -64,10 +64,15 @@ public class Cell : MonoBehaviour
 
     //Colors
 
-    public void ChangeColor(Color color)
+    public void ChangeColor(Color color, Color oldColor = default(Color))
     {
         this.color = color;
         GetComponent<SpriteRenderer>().color = this.color;
+
+        if(oldColor != default(Color))
+        {
+            this.oldColor = oldColor;
+        }
     }
 
     //Mouse events

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour 
 {
-	public static GameManager instance = null;
+	//public static GameManager instance = null;
 
 	private static CardManager cards;
 	private static BoardManager board;
@@ -12,10 +12,10 @@ public class GameManager : MonoBehaviour
 
 	void Awake()
 	{
-		if (instance == null)
+		/* if (instance == null)
 			instance = this;
 		else if (instance != this)
-			Destroy(gameObject);    
+			Destroy(gameObject); */
 		
 		//DontDestroyOnLoad(gameObject);
 		
@@ -26,6 +26,24 @@ public class GameManager : MonoBehaviour
 
 	public static Card GetSelectedCard()
 	{
-		return cards.selectedCard;
+		if(cards.selectedCard != null)
+		{
+			return cards.selectedCard.GetComponent<Card>();
+		}
+
+		return null;
+	}
+
+	public static bool CanPlayCard()
+	{
+		return true;
+
+		//Change later to check card type and condition (mana cost, targets, etc)
+	}
+
+	public static void PlayCard(Cell cell)
+	{
+		board.Summon(cell, GetSelectedCard(), true);
+		cards.Play();
 	}
 }

@@ -12,6 +12,6 @@ public class Creature : MonoBehaviour
     {
         card = c;
         ally = a;
-        card.Print();
+        //card.Print();
     }
 }

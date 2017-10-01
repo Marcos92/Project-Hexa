@@ -9,8 +9,12 @@ public class BoardManager : MonoBehaviour
     //public Creature allyCreature, evilCreature; //DELETE LATER
     public GameObject grid;
 
-	void Start ()
+    bool initialized = false;
+
+	void Start()
     {
+        Debug.Log("start");
+
         cells = new List<Cell>();
 
         for (int z = 0; z < sizeZ; z++)
@@ -177,7 +181,10 @@ public class BoardManager : MonoBehaviour
     public void Summon (Cell cell, Card card, bool isAlly)
     {
         cell.creature = new Creature(card, isAlly);
-        cell.ChangeColor(cell.creature.ally ? cell.allyColor : cell.enemyColor);
+
+        Color color = cell.creature.ally ? cell.allyColor : cell.enemyColor;
+
+        cell.ChangeColor(color, color);
     }
 
     public void Move(Cell destination)
@@ -218,11 +225,13 @@ public class BoardManager : MonoBehaviour
 
     void HandleClickCell(Cell c)
     {
+        Debug.Log("CLICK");
+
         if(GameManager.GetSelectedCard() != null)
         {
-            if(c.Empty())
+            if(c.Empty() && GameManager.CanPlayCard())
             {
-                Summon(c, GameManager.GetSelectedCard(), true);
+                GameManager.PlayCard(c);
             }
         }
         else

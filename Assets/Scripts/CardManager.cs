@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class CardManager : MonoBehaviour 
 {
-	private List<Card> hand; 
 	private List<Card> deck;
 
-	public Transform handTransform;
+	public Transform hand;
 	public Transform deckTransform;
 
 	public GameObject cardPrefab;
 
-	public Card selectedCard; 
+	public Transform selectedCard; 
 
 	// Use this for initialization
 	void Start () 
@@ -32,17 +31,16 @@ public class CardManager : MonoBehaviour
 	private void InstantiateCard(Card card, Vector3 position, Quaternion rotation)
 	{
 		GameObject newCard = Instantiate(cardPrefab, position, rotation);
-		newCard.transform.parent = handTransform;
+		newCard.transform.parent = hand;
 		newCard.GetComponent<Card>().Create(card.GetCurrentInfo());
+		newCard.GetComponent<Card>().CreateVisual();
 	}
 
 	//HAND
 
 	void BuildHand()
     {
-		hand = new List<Card>();
-
-        for(int i = 0; i < 5; i++) 
+		for(int i = 0; i < 5; i++) 
 		{
 			Draw(deck[i]);
 		}
@@ -52,13 +50,12 @@ public class CardManager : MonoBehaviour
 
 	void Draw(Card card)
 	{
-		hand.Add(card);
-		InstantiateCard(card, handTransform.position, handTransform.rotation);
+		InstantiateCard(card, hand.position, hand.rotation);
 	}
 
 	void ArrangeHand()
     {
-        int count = hand.Count;
+		int count = hand.childCount;
 		float cardSpacingWidth = 6f/count;
 		//float cardSpacingHeight = 0.2f;
         float cardSpacingDepth = 0.01f;
@@ -82,19 +79,17 @@ public class CardManager : MonoBehaviour
             cardRotation = (count - 1) * 0.5f * cardSpacingAngle;*/
         }
 
-		Transform[] children = new Transform[handTransform.childCount];
+		Transform[] children = new Transform[hand.childCount];
 
-		for(int i = 0; i < handTransform.childCount; i++)
+		for(int i = 0; i < hand.childCount; i++)
 		{
-			children[i] = handTransform.GetChild(i);
+			children[i] = hand.GetChild(i);
 		}
 
         foreach(Transform t in children)
         {
 			GameObject obj = t.gameObject;
 			Card card = obj.GetComponent<Card>();
-
-			Debug.Log(t);
 
 			obj.transform.localPosition = new Vector3(cardPositionX, cardPositionY, cardDepth);
 
@@ -132,11 +127,26 @@ public class CardManager : MonoBehaviour
         }
     }
 
+	public void Play()
+	{
+		for(int i = 0; i < hand.childCount; i++)
+		{
+			if(hand.GetChild(i) == selectedCard)
+			{
+				DestroyImmediate(hand.GetChild(i).gameObject);
+				selectedCard = null;
+				break;
+			}
+		}
+
+		ArrangeHand();
+	}
+
 	void PrintHand()
 	{
-		foreach(Card c in hand)
+		for(int i = 0; i < hand.childCount; i++)
 		{
-			c.Print();
+			hand.GetChild(i).GetComponent<Card>().Print();
 		}
 	}
 
@@ -189,7 +199,7 @@ public class CardManager : MonoBehaviour
 
 	void HandleClickCard(Card c)
 	{
-		selectedCard = c;
-		selectedCard.Print();
+		selectedCard = c.gameObject.transform;
+		//selectedCard.Print();
 	}
 }

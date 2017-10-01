@@ -8,8 +8,6 @@ using System;
 
 public class Database : MonoBehaviour
 {
-	static public GameObject cardTemplate;
-
 	static public List<CardInfo> cardDatabase; 
 
 	void Start()
@@ -43,6 +41,12 @@ public class Database : MonoBehaviour
 
 		reader.Close();
 
+		//Invoke("LoadGame", 1);
+		LoadGame();
+	}
+
+	void LoadGame()
+	{
 		SceneManager.LoadScene("GridTest");
 	}
 }

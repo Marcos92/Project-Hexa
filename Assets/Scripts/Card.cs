@@ -53,7 +53,7 @@ public class Card : MonoBehaviour
 
 	public Card(CardInfo i)
 	{
-		info = i;
+		Create(i);
 	}
 
 	void Start()
@@ -101,8 +101,6 @@ public class Card : MonoBehaviour
 
 		range = info.range;
 		initialRange = range;
-
-		CreateVisual();
 	}
 
 	//Spell card constructor
